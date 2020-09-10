@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 from tqdm import tqdm
-
 import torch
 import torchvision
 import torchvision.transforms as transforms
@@ -56,7 +55,7 @@ class Fashion_MNIST(nn.Module):
         x = F.max_pool2d(F.relu(self.conv3(x)), (2,2))
         # x = self.droput(x)
 
-        if self._to_linear is None:
+        if not self._to_linear:
             self._to_linear = x[0].shape[0]*x[0].shape[1]*x[0].shape[2]
         return x
 
