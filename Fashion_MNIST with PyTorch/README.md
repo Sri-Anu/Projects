@@ -1,0 +1,2 @@
+# Fashion_MNIST with PyTorch
+PyTorch is something that I recently learned (at the time of uploading this lol). I wanted to build my own project but really didn't know where to start after learning the basics. I built and coded Fashion_MNIST by myself (and stackoverflow advice!) to really understand how data preprocessing works. In keras, you can just call a model.fit but you gotta hard code that stuff in PyTorch. This is someting I struggled with and am really proud to get this out there!
