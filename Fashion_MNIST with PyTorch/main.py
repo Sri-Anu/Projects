@@ -39,7 +39,7 @@ class Fashion_MNIST(nn.Module):
         self.conv1 = nn.Conv2d(1, 32, 3)
         self.conv2 = nn.Conv2d(32, 64, 3)
         self.conv3 = nn.Conv2d(64, 128, 3)
-        self.dropout = nn.Dropout(0.2)
+        self.dropout = nn.Dropout(p=0.2)
 
         self._to_linear = None
         x = torch.randn(28, 28).view(-1, 1, 28, 28)
@@ -50,11 +50,11 @@ class Fashion_MNIST(nn.Module):
     
     def conv(self, x):
         x = F.max_pool2d(F.relu(self.conv1(x)), (2,2))
-        # x = self.droput(x)
+        x = F.dropout(x)
         x = F.max_pool2d(F.relu(self.conv2(x)), (2,2))
-        # x = self.droput(x)
+        x = self.dropout(x)
         x = F.max_pool2d(F.relu(self.conv3(x)), (2,2))
-        # x = self.droput(x)
+        x = self.dropout(x)
 
         if self._to_linear is None:
             self._to_linear = x[0].shape[0]*x[0].shape[1]*x[0].shape[2]
@@ -71,11 +71,11 @@ class Fashion_MNIST(nn.Module):
 NN = Fashion_MNIST()
 
 optimizer = optim.Adam(NN.parameters(), lr=1e-3)
-loss_function = nn.CrossEntropyLoss()
+loss_function = nn.NLLLoss()
 
 EPOCHS = 5
 
-for epoch in tqdm(range(0, EPOCHS)):
+for epoch in range(0,EPOCHS):
     for data in train_loader:
         X, y = data
         NN.zero_grad()
@@ -88,13 +88,14 @@ for epoch in tqdm(range(0, EPOCHS)):
 correct = 0
 total = 0
 
-with torch.no_grad(): #no_grad means no gradients. we get rid of the gradient to calculate accuracy. we dont wanna know gradients; we wnant to know accuracy 
-    for data in train_loader:
+with torch.no_grad(): 
+    for data in test_loader:
         X, y = data
+        NN.zero_grad()
         output = NN(X.view(-1, 1, 28, 28))
         for idx, i in enumerate(output):
             if torch.argmax(i) == y[idx]:
                 correct += 1
             total += 1
 
-print("Accuracy: ", round(correct/total, 2))
+print("Accuracy: ", round(correct/total, 3))
