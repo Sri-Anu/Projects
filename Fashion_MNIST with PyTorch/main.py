@@ -50,14 +50,14 @@ class Fashion_MNIST(nn.Module):
             nn.Dropout(p=0.2),
             nn.MaxPool2d((2,2))
         )
-        
+        self.flatten = nn.Flatten()
         self.fc1 = nn.Linear(1600, 128)
         self.fc2 = nn.Linear(128, 10)
 
     def forward(self, x):
         x = self.layer1(x)
         x = self.layer2(x)
-        x = x.view(x.shape[0], -1)
+        x = self.flatten(x)
         x = self.fc1(x)
         x = F.relu(x)
         x = self.fc2(x)
