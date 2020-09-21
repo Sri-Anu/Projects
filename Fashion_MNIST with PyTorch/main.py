@@ -28,6 +28,8 @@ test_loader = torch.utils.data.DataLoader(test_set,
                                                 batch_size=BATCH_SIZE,
                                                 shuffle=True)
 
+class_names = ["T-shirt/top", "Trouser", "Pullover", "Dress", "Coat", "Sandal", "Shirt", "Sneaker", "Bag", "Ankle boot"] 
+
 # Just printing an image from the dataset
 # image, label = next(iter(train_set))
 # plt.imshow(image.view(28,28), cmap="gray")
@@ -81,6 +83,8 @@ for epoch in range(0,EPOCHS):
         optimizer.step()
     print(loss)
 
+predictions = []
+correct_labels = []
 correct = 0
 total = 0
 
@@ -92,6 +96,8 @@ with torch.no_grad():
         for idx, i in enumerate(output):
             if torch.argmax(i) == y[idx]:
                 correct += 1
+            predictions.append(torch.argmax(i).tolist())
+            correct_labels.append(y[idx].tolist())
             total += 1
 
 print("Accuracy: ", round(correct/total, 3))
